@@ -109,7 +109,6 @@ Création, édition et renommage de notes privées stockées localement. Chaque 
 - **Interface :** WPF (Windows Presentation Foundation)
 - **Chiffrement du profil :** AES-256-CBC, PBKDF2 (100 000 itérations, SHA-256)
 - **Plateforme :** Windows uniquement
-- **Co-Développement :** ByronlLove & Gemini (AI Collaborator)
 
 ## Crédits
 
