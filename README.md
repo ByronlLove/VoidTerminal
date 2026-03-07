@@ -80,6 +80,6 @@ Les espaces sont remplacés par `(_)`.
 
 **Avec l'alphabet de l'exemple :** `D=∂`, `Q=∅`, `K=κ`, `R=ρ`, `A=α`, `T=τ`, `O=ο`, `E=ε`, `H=ℏ`
 
-![Mode Void](Void/Assets/screenshots/mod void.png)
+![Mode Void](Void/Assets/screenshots/mod-void.png)
 
 `DQQKRAT⊙ OQQEH` → `∂∅∅κρατ⊙(_)ο∅∅εℏ`
