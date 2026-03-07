@@ -19,7 +19,6 @@ public static class CryptoEngine
 {
     private static readonly string Voyelles = "AEIOUYaeiouy";
 
-    // --- LE NETTOYEUR D'ACCENTS UNIVERSEL ---
     private static char RemoveAccent(char c)
     {
         if (c == 'œ') return 'o';
@@ -50,7 +49,7 @@ public static class CryptoEngine
         return false;
     }
 
-    public static string To125(string text, CryptoConfig config)
+    public static string To1(string text, CryptoConfig config)
     {
         if (string.IsNullOrEmpty(text)) return "";
         string shifted = ShiftChar(text, config);
@@ -84,12 +83,10 @@ public static class CryptoEngine
         return temp.ToString();
     }
 
-    // --- ENCRYPTAGE : MACHINE À ÉTATS PAR BLOCS ET VIRGULES ---
     private static string ShiftChar(string message, CryptoConfig config)
     {
         if (config == null || config.Rules == null || config.Rules.Count == 0) return message;
 
-        // On utilise un index global pour les blocs, et un tableau pour les virgules de chaque règle
         int globalRuleIndex = 0;
         int[] ruleCursors = new int[config.Rules.Count];
         var res = new StringBuilder();
@@ -112,7 +109,6 @@ public static class CryptoEngine
             bool matchFound = false;
             int attempts = 0;
 
-            // On cherche la règle active pour ce bloc
             while (attempts < config.Rules.Count)
             {
                 var rule = config.Rules[globalRuleIndex];
@@ -121,7 +117,6 @@ public static class CryptoEngine
                     matchFound = true;
                     break;
                 }
-                // Si la cible ne correspond pas, le bloc est cassé, on passe à la règle suivante
                 globalRuleIndex = (globalRuleIndex + 1) % config.Rules.Count;
                 attempts++;
             }
@@ -137,7 +132,6 @@ public static class CryptoEngine
                 char dep = char.IsUpper(c) ? 'A' : 'a';
                 res.Append((char)((c - dep + normalizedShift) % 26 + dep));
 
-                // On fait avancer la virgule (le curseur interne) de CETTE règle
                 ruleCursors[globalRuleIndex] = (ruleCursors[globalRuleIndex] + 1) % activeRule.Shifts.Count;
             }
             else
@@ -148,7 +142,6 @@ public static class CryptoEngine
         return res.ToString();
     }
 
-    // --- DÉCRYPTAGE INTELLIGENT PRÉDICTIF ---
     private class StateResult
     {
         public string Text { get; set; }
@@ -241,7 +234,6 @@ public static class CryptoEngine
             {
                 bool matchedAny = false;
 
-                // L'algorithme teste récursivement toutes les règles possibles pour retrouver l'origine de la lettre
                 for (int attempts = 0; attempts < config.Rules.Count; attempts++)
                 {
                     int testRuleIndex = (state.GlobalRuleIndex + attempts) % config.Rules.Count;
@@ -253,10 +245,8 @@ public static class CryptoEngine
                     int normalizedShift = shift % 26;
                     if (normalizedShift < 0) normalizedShift += 26;
 
-                    // On applique le décalage INVERSE
                     char unshifted = (char)((c - dep - normalizedShift + 26) % 26 + dep);
 
-                    // Si la lettre inversée correspond BIEN à la cible de la règle testée, c'est une possibilité valide !
                     if (MatchesTarget(unshifted, rule.Target))
                     {
                         var newCursors = (int[])state.RuleCursors.Clone();
@@ -265,7 +255,7 @@ public static class CryptoEngine
                         next.Add(new StateResult
                         {
                             Text = state.Text + unshifted,
-                            GlobalRuleIndex = testRuleIndex, // Le bloc a peut-être avancé
+                            GlobalRuleIndex = testRuleIndex, 
                             RuleCursors = newCursors
                         });
                         matchedAny = true;

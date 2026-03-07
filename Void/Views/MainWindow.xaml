@@ -684,7 +684,7 @@
                         </Grid.ColumnDefinitions>
                         <Button Grid.Column="0" Content="Encrypter" Click="BtnActionEnc_Click" Height="45" Style="{StaticResource ActionButtonStyle}" Margin="0,0,20,0"/>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <RadioButton x:Name="Radio125" Content="Mode 125" GroupName="ModeGroup" IsChecked="True" Style="{StaticResource ModeRadioStyle}"/>
+                            <RadioButton x:Name="Radio1" Content="Mode 1" GroupName="ModeGroup" IsChecked="True" Style="{StaticResource ModeRadioStyle}"/>
                             <RadioButton x:Name="RadioVoid" Content="Mode Void" GroupName="ModeGroup" Style="{StaticResource ModeRadioStyle}"/>
                         </StackPanel>
                         <Button Grid.Column="2" Content="Décrypter" Click="BtnActionDec_Click" Height="45" Style="{StaticResource ActionButtonStyle}" Margin="20,0,0,0"/>

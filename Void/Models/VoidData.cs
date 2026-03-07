@@ -8,7 +8,6 @@ public class ShiftRule
     public List<int> Shifts { get; set; } = new();
 }
 
-// NOUVEAU : Permet d'associer "A" à "αβ" (multi-caractères)
 public class VoidCharMapping
 {
     public string Key { get; set; } = "";
@@ -17,14 +16,13 @@ public class VoidCharMapping
 
 public class CryptoConfig
 {
-    public string Mode1Name { get; set; } = "Mode 125";
+    public string Mode1Name { get; set; } = "Mode 1";
     public string Mode2Name { get; set; } = "Mode Void";
     public string ResetCharacters { get; set; } = ".";
 
     public List<ShiftRule> Rules { get; set; } = new();
     public List<VoidCharMapping> VoidMappings { get; set; } = new();
 
-    // Constructeur : si c'est la première fois, on charge l'alphabet par défaut
     public CryptoConfig()
     {
         string defaultKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ.,'?!";

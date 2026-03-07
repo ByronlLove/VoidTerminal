@@ -37,7 +37,6 @@ namespace VoidTerminal.Views
         private bool _isCustomMaximized = false;
         private bool _isFullScreen = false;
 
-        // --- DÉBUT : API WINDOWS POUR LE VRAI FLOU ---
         internal enum AccentState
         {
             ACCENT_DISABLED = 0,
@@ -67,7 +66,6 @@ namespace VoidTerminal.Views
 
         [DllImport("user32.dll")]
         internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
-        // --- FIN : API WINDOWS ---
 
         public MainWindow(VoidData data, string password)
         {
@@ -77,7 +75,7 @@ namespace VoidTerminal.Views
 
             if (_data.EngineConfig != null)
             {
-                Radio125.Content = _data.EngineConfig.Mode1Name;
+                Radio1.Content = _data.EngineConfig.Mode1Name;
                 RadioVoid.Content = _data.EngineConfig.Mode2Name;
             }
 
@@ -85,7 +83,6 @@ namespace VoidTerminal.Views
             RefreshNotesList();
         }
 
-        // --- GESTION FENETRE ---
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -112,13 +109,11 @@ namespace VoidTerminal.Views
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            // Gestion du Plein Écran (F11 ou Alt+Entrée)
             if (e.Key == Key.F11 || ((e.Key == Key.Return || e.SystemKey == Key.Return) && (Keyboard.Modifiers == ModifierKeys.Alt)))
             {
                 ToggleFullScreen();
                 e.Handled = true;
             }
-            // Gestion de la touche Échap (Fermeture des menus en cascade)
             else if (e.Key == Key.Escape)
             {
                 if (CustomAlertOverlay.Visibility == Visibility.Visible) BtnCloseAlert_Click(null, null);
@@ -138,18 +133,14 @@ namespace VoidTerminal.Views
         private void BtnMaximize_Click(object sender, RoutedEventArgs e) => ToggleMaximize();
         private void BtnMinimize_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
         private void BtnExit_Click(object sender, RoutedEventArgs e) => Application.Current.Shutdown();
-        // --- VERROUILLER L'APPLICATION ---
         private void BtnLockApp_Click(object sender, RoutedEventArgs e)
         {
-            // On recrée la fenêtre de connexion
             LoginWindow login = new LoginWindow();
             login.Show();
 
-            // On ferme la fenêtre principale
             this.Close();
         }
 
-        // --- GESTION DES MODES VISUELS (GHOST & GLASS) ---
         private void ToggleGhost_Click(object sender, RoutedEventArgs e)
         {
             if (SwitchGhost.IsChecked == true)
@@ -234,17 +225,14 @@ namespace VoidTerminal.Views
             Marshal.FreeHGlobal(accentPtr);
         }
 
-        // --- ANIMATIONS & OVERLAYS ---
         private void BtnMenu_Click(object sender, RoutedEventArgs e) { _isSidebarOpen = !_isSidebarOpen; double targetWidth = _isSidebarOpen ? 250 : 0; DoubleAnimation anim = new DoubleAnimation { To = targetWidth, Duration = TimeSpan.FromSeconds(0.25), EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut } }; SidebarBorder.BeginAnimation(Border.WidthProperty, anim); }
         private void ShowOverlayWithAnimation(Grid overlay, Border laserBorder) { overlay.Visibility = Visibility.Visible; if (laserBorder != null) { DoubleAnimation anim = new DoubleAnimation(0, 1, TimeSpan.FromSeconds(0.5)); laserBorder.BeginAnimation(UIElement.OpacityProperty, anim); } }
         private void OnOverlayClick(object sender, MouseButtonEventArgs e) { if (e.OriginalSource == sender && sender is Grid grid) { grid.Visibility = Visibility.Collapsed; e.Handled = true; } }
 
-        // --- GESTIONNAIRE D'ALERTES SUR MESURE ---
         private IInputElement _elementToFocusAfterAlert = null;
 
         private void ShowCustomAlert(string message, string title = "Information", string colorHex = "#8A2BE2")
         {
-            // 1. On mémorise la case active (ex: la PasswordBox)
             _elementToFocusAfterAlert = Keyboard.FocusedElement;
 
             LblAlertTitle.Text = title;
@@ -252,7 +240,6 @@ namespace VoidTerminal.Views
             LblAlertTitle.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorHex));
             ShowOverlayWithAnimation(CustomAlertOverlay, LaserBorderAlert);
 
-            // 2. On donne le focus au bouton OK pour que la touche "Entrée" le valide
             BtnAlertOk.Focus();
         }
 
@@ -260,18 +247,16 @@ namespace VoidTerminal.Views
         {
             CustomAlertOverlay.Visibility = Visibility.Collapsed;
 
-            // 3. Quand on ferme, on remet le curseur dans la case d'origine !
             if (_elementToFocusAfterAlert != null)
             {
                 Keyboard.Focus(_elementToFocusAfterAlert);
-                _elementToFocusAfterAlert = null; // On nettoie la mémoire
+                _elementToFocusAfterAlert = null; 
             }
         }
 
-        // --- CRYPTAGE / DECRYPTAGE ---
         private void BtnActionEnc_Click(object sender, RoutedEventArgs e)
         {
-            string result = RadioVoid.IsChecked == true ? CryptoEngine.ToVoid(TxtInput.Text, _data.EngineConfig) : CryptoEngine.To125(TxtInput.Text, _data.EngineConfig);
+            string result = RadioVoid.IsChecked == true ? CryptoEngine.ToVoid(TxtInput.Text, _data.EngineConfig) : CryptoEngine.To1(TxtInput.Text, _data.EngineConfig);
             TxtResult.Document.Blocks.Clear(); TxtResult.Document.Blocks.Add(new Paragraph(new Run($">>> CRYPTAGE <<<\n\n{result}")));
         }
 
@@ -301,7 +286,6 @@ namespace VoidTerminal.Views
         private string FormatSegment(string input, ref bool isStart) { if (string.IsNullOrEmpty(input)) return input; StringBuilder sb = new StringBuilder(); foreach (char c in input) { if (char.IsLetter(c)) { if (isStart) { sb.Append(char.ToUpper(c)); isStart = false; } else sb.Append(char.ToLower(c)); } else { sb.Append(c); if (c == '.' || c == '?' || c == '!' || c == '\n') isStart = true; } } return sb.ToString(); }
         private void TxtResult_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) { TextPointer pointer = TxtResult.GetPositionFromPoint(e.GetPosition(TxtResult), true); if (pointer != null) { var element = pointer.Parent as TextElement; while (element != null && !(element is Hyperlink)) element = element.Parent as TextElement; if (element is Hyperlink link && link.Tag is List<string> possibilities) { _fullPossibilities = possibilities; ListPossibilities.ItemsSource = _fullPossibilities; ShowOverlayWithAnimation(PossibilityOverlay, LaserBorderPoss); TxtSearchPossibilities.Width = 0; TxtSearchPossibilities.Text = ""; _isSearchPossOpen = false; e.Handled = true; } } }
 
-        // --- DICTIONNAIRE ---
         private void AddWordToDictionary(string word) { string w = word.ToLower(); if (!_data.Dictionary.Contains(w)) { _data.Dictionary.Add(w); _data.UserAddedWords.Add(w); } }
         private void BtnAddDico_Click(object sender, RoutedEventArgs e) { var matches = Regex.Matches(TxtInput.Text, @"\w+"); var newCandidates = new HashSet<string>(); foreach (Match match in matches) { string w = match.Value.ToLower(); if (!_data.Dictionary.Contains(w)) newCandidates.Add(w); } if (newCandidates.Count > 0) { ListNewWordsCandidates.ItemsSource = newCandidates.OrderBy(x => x).ToList(); ListNewWordsCandidates.SelectAll(); ShowOverlayWithAnimation(AddWordsOverlay, LaserBorderAddWords); } else ShowCustomAlert("Tous les mots sont déjà dans le dictionnaire.", "Information", "#FFA500"); }
         private void BtnConfirmAddWords_Click(object sender, RoutedEventArgs e) { int count = 0; foreach (string w in ListNewWordsCandidates.SelectedItems) { AddWordToDictionary(w); count++; } SecurityManager.SaveSecureData(_data, _password); AddWordsOverlay.Visibility = Visibility.Collapsed; ShowCustomAlert($"{count} mot(s) ajouté(s) au dictionnaire.", "Opération réussie", "#FFA500"); }
@@ -311,7 +295,6 @@ namespace VoidTerminal.Views
         private void TxtSearchPossibilities_TextChanged(object sender, TextChangedEventArgs e) { string search = TxtSearchPossibilities.Text.ToLower(); if (string.IsNullOrWhiteSpace(search)) ListPossibilities.ItemsSource = _fullPossibilities; else ListPossibilities.ItemsSource = _fullPossibilities.Where(p => p.ToLower().Contains(search)).ToList(); }
         private void TxtSearchPossibilities_KeyDown(object sender, KeyEventArgs e) { if (e.Key == Key.Enter && ListPossibilities.Items.Count > 0) { ListPossibilities.SelectedIndex = 0; ListPossibilities.ScrollIntoView(ListPossibilities.SelectedItem); ListPossibilities.Focus(); } }
 
-        // Authentification Dictionnaire
         private void BtnManageDict_Click(object sender, RoutedEventArgs e) { if (string.IsNullOrEmpty(_data.DictProtectionHash)) { LblDictAuthTitle.Text = "Création sécurité"; LblDictAuthMsg.Text = "Définissez un mot de passe :"; } else { LblDictAuthTitle.Text = "Accès sécurisé"; LblDictAuthMsg.Text = "Mot de passe requis :"; } TxtDictPassword.Clear(); ShowOverlayWithAnimation(DictAuthOverlay, LaserBorderAuth); TxtDictPassword.Focus(); }
         private void BtnValidateDictAuth_Click(object sender, RoutedEventArgs e) { string inputPass = TxtDictPassword.Password; if (string.IsNullOrWhiteSpace(inputPass)) return; string hashedInput = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(inputPass))); if (string.IsNullOrEmpty(_data.DictProtectionHash)) { _data.DictProtectionHash = hashedInput; SecurityManager.SaveSecureData(_data, _password); OpenDictManager(); } else { if (hashedInput == _data.DictProtectionHash) OpenDictManager(); else { ShowCustomAlert("Mot de passe incorrect.", "Accès refusé", "#FF5555"); TxtDictPassword.Clear(); } } }
         private void TxtDictPassword_KeyDown(object sender, KeyEventArgs e) { if (e.Key == Key.Enter) BtnValidateDictAuth_Click(sender, e); }
@@ -328,7 +311,6 @@ namespace VoidTerminal.Views
         private void BtnClosePossibility_Click(object sender, RoutedEventArgs e) => PossibilityOverlay.Visibility = Visibility.Collapsed;
         private void BtnAddToDicoFromList_Click(object sender, RoutedEventArgs e) { if (ListPossibilities.SelectedItem is string w) { AddWordToDictionary(w); SecurityManager.SaveSecureData(_data, _password); ShowCustomAlert($"'{w}' a été ajouté au dictionnaire.", "Ajout réussi", "#FFA500"); BtnActionDec_Click(null, null); PossibilityOverlay.Visibility = Visibility.Collapsed; } }
 
-        // --- NOTES ---
         private void RefreshNotesList() { ListNotes.ItemsSource = null; ListNotes.ItemsSource = _data.Notes.Keys.OrderBy(k => k.Length).ThenBy(k => k).ToList(); }
         private void BtnNewNote_Click(object sender, RoutedEventArgs e) { int i = 1; string t = $"Note {i}"; while (_data.Notes.ContainsKey(t)) { i++; t = $"Note {i}"; } _data.Notes.Add(t, ""); RefreshNotesList(); _currentNoteKey = t; TxtNoteTitle.Text = t; TxtNoteContent.Text = ""; ShowOverlayWithAnimation(NoteEditorOverlay, LaserBorderNote); }
         private void OnNoteClicked(object sender, MouseButtonEventArgs e) { if (sender is ListBoxItem item && item.DataContext is string title && _data.Notes.ContainsKey(title)) { _currentNoteKey = title; TxtNoteTitle.Text = title; TxtNoteContent.Text = _data.Notes[title]; ShowOverlayWithAnimation(NoteEditorOverlay, LaserBorderNote); } }
@@ -376,14 +358,12 @@ namespace VoidTerminal.Views
             }
         }
 
-        // --- REGLAGES ---
         private void BtnToggleSettings_Click(object sender, RoutedEventArgs e) { if (SettingsPanel.Visibility == Visibility.Collapsed) { SettingsPanel.Visibility = Visibility.Visible; NotesControls.Visibility = Visibility.Collapsed; ListNotes.Visibility = Visibility.Collapsed; BtnOpenSettings.Visibility = Visibility.Collapsed; PanelSettingsControls.Visibility = Visibility.Visible; LblNotesTitle.Visibility = Visibility.Collapsed; } else { SettingsPanel.Visibility = Visibility.Collapsed; NotesControls.Visibility = Visibility.Visible; ListNotes.Visibility = Visibility.Visible; LblNotesTitle.Visibility = Visibility.Visible; PanelSettingsControls.Visibility = Visibility.Collapsed; BtnOpenSettings.Visibility = Visibility.Visible; } }
         private void BtnExportVoid_Click(object sender, RoutedEventArgs e) { SaveFileDialog s = new SaveFileDialog { Filter = "Backup (*.void)|*.void", FileName = "backup.void" }; if (s.ShowDialog() == true && SecurityManager.DatabaseExists()) { File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data.void"), s.FileName, true); ShowCustomAlert("Backup exporté.", "Succès", "#8A2BE2"); } }
         private void BtnImportVoid_Click(object sender, RoutedEventArgs e) { OpenFileDialog o = new OpenFileDialog { Filter = "Backup (*.void)|*.void" }; if (o.ShowDialog() == true) { try { File.Copy(o.FileName, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data.void"), true); MessageBox.Show("L'application va redémarrer pour appliquer la sauvegarde."); System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName); Application.Current.Shutdown(); } catch { ShowCustomAlert("Erreur de restauration.", "Erreur", "#FF5555"); } } }
         private void BtnExportJson_Click(object sender, RoutedEventArgs e) { SaveFileDialog s = new SaveFileDialog { Filter = "JSON|*.json", FileName = "data.json" }; if (s.ShowDialog() == true) { File.WriteAllText(s.FileName, JsonSerializer.Serialize(_data, new JsonSerializerOptions { WriteIndented = true })); ShowCustomAlert("Export JSON terminé.", "Succès", "#8A2BE2"); } }
         private void BtnImportJson_Click(object sender, RoutedEventArgs e) { OpenFileDialog o = new OpenFileDialog { Filter = "JSON|*.json" }; if (o.ShowDialog() == true) { try { var d = JsonSerializer.Deserialize<VoidData>(File.ReadAllText(o.FileName), new JsonSerializerOptions { PropertyNameCaseInsensitive = true }); if (d != null) { if (d.Dictionary != null) foreach (var w in d.Dictionary) AddWordToDictionary(w); if (d.Notes != null) foreach (var n in d.Notes) { if (!_data.Notes.ContainsKey(n.Key)) _data.Notes.Add(n.Key, n.Value); else _data.Notes.Add(n.Key + " (Import)", n.Value); } SecurityManager.SaveSecureData(_data, _password); RefreshNotesList(); ShowCustomAlert("Import JSON terminé.", "Succès", "#8A2BE2"); } } catch { ShowCustomAlert("Fichier JSON Invalide.", "Erreur", "#FF5555"); } } }
 
-        // --- REGLAGE CRYPTOGRAPHIQUE (FORGE) ---
         public class RuleDisplayItem { public ShiftRule Rule { get; set; } public string DisplayText { get; set; } }
         private List<ShiftRule> _tempRules = new();
         private List<VoidCharMapping> _tempMappings = new();
@@ -413,7 +393,6 @@ namespace VoidTerminal.Views
             {
                 ShowCustomAlert("Mot de passe incorrect.", "Accès refusé", "#FF5555");
                 TxtCryptoPassword.Clear();
-                // J'ai supprimé le TxtCryptoPassword.Focus() ici, c'est lui qui posait problème !
             }
         }
 
@@ -482,15 +461,13 @@ namespace VoidTerminal.Views
             foreach (var m in _tempMappings) _data.EngineConfig.VoidMappings.Add(new VoidCharMapping { Key = m.Key, Value = m.Value });
 
             SecurityManager.SaveSecureData(_data, _password);
-            Radio125.Content = _data.EngineConfig.Mode1Name; RadioVoid.Content = _data.EngineConfig.Mode2Name;
+            Radio1.Content = _data.EngineConfig.Mode1Name; RadioVoid.Content = _data.EngineConfig.Mode2Name;
             CryptoForgeOverlay.Visibility = Visibility.Collapsed;
             ShowCustomAlert("Configuration cryptographique sauvegardée !", "Succès", "#8A2BE2");
         }
 
         private void BtnCancelForge_Click(object sender, RoutedEventArgs e) => CryptoForgeOverlay.Visibility = Visibility.Collapsed;
-        // ==========================================================
-        // --- SYSTÈME D'IMPORT / EXPORT CHIFFRÉ (AES-256) ---
-        // ==========================================================
+
 
         private class DictExportData
         {
@@ -498,7 +475,6 @@ namespace VoidTerminal.Views
             public HashSet<string> UserAddedWords { get; set; }
         }
 
-        // --- EXPORTATION GÉNÉRIQUE CHIFFRÉE ---
         private void ExportEncrypted<T>(T dataObject, string defaultExt, string filter)
         {
             SaveFileDialog sfd = new SaveFileDialog { Filter = filter, DefaultExt = defaultExt };
@@ -511,7 +487,7 @@ namespace VoidTerminal.Views
                     RandomNumberGenerator.Fill(salt);
                     
                     using var pbkdf2 = new Rfc2898DeriveBytes(_password, salt, 100000, HashAlgorithmName.SHA256);
-                    byte[] key = pbkdf2.GetBytes(32); // Clé AES 256 bits
+                    byte[] key = pbkdf2.GetBytes(32); 
                     byte[] iv = pbkdf2.GetBytes(16);
 
                     using Aes aes = Aes.Create();
@@ -519,7 +495,7 @@ namespace VoidTerminal.Views
                     aes.IV = iv;
 
                     using MemoryStream ms = new MemoryStream();
-                    ms.Write(salt, 0, salt.Length); // On stocke le sel au début du fichier
+                    ms.Write(salt, 0, salt.Length); 
                     using (CryptoStream cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
                     {
                         byte[] plainBytes = Encoding.UTF8.GetBytes(json);
@@ -532,7 +508,6 @@ namespace VoidTerminal.Views
             }
         }
 
-        // --- IMPORTATION GÉNÉRIQUE CHIFFRÉE ---
         private T ImportEncrypted<T>(string filter)
         {
             OpenFileDialog ofd = new OpenFileDialog { Filter = filter };
@@ -564,7 +539,6 @@ namespace VoidTerminal.Views
             return default;
         }
 
-        // --- ACTIONS DES BOUTONS DICTIONNAIRE ---
         private void BtnExportDict_Click(object sender, RoutedEventArgs e)
         {
             var exportData = new DictExportData { Dictionary = _data.Dictionary, UserAddedWords = _data.UserAddedWords };
@@ -573,7 +547,38 @@ namespace VoidTerminal.Views
 
         private void BtnImportDict_Click(object sender, RoutedEventArgs e)
         {
-            var imported = ImportEncrypted<DictExportData>("Dictionnaire Crypté (*.voidd)|*.voidd");
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Filter = "Dictionnaire Crypté (*.voidd)|*.voidd|Fichier texte (*.txt)|*.txt"
+            };
+
+            if (ofd.ShowDialog() != true) return;
+
+            if (ofd.FileName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    var words = File.ReadAllLines(ofd.FileName)
+                                   .Select(w => w.Trim().ToLower())
+                                   .Where(w => !string.IsNullOrWhiteSpace(w))
+                                   .ToList();
+
+                    _data.Dictionary.Clear();
+                    foreach (var w in _data.UserAddedWords)
+                        _data.Dictionary.Add(w);
+
+                    foreach (var w in words)
+                        _data.Dictionary.Add(w);
+
+                    SecurityManager.SaveSecureData(_data, _password);
+                    RefreshDictList(TxtSearchDict.Text);
+                    ShowCustomAlert("Dictionnaire .txt importé avec succès.", "Import réussi", "#8A2BE2");
+                }
+                catch { ShowCustomAlert("Erreur lors de la lecture du fichier .txt.", "Erreur", "#FF5555"); }
+                return;
+            }
+
+            var imported = ImportEncrypted<DictExportData>(ofd.FileName);
             if (imported != null)
             {
                 if (imported.Dictionary != null) foreach (var w in imported.Dictionary) AddWordToDictionary(w);
@@ -583,7 +588,6 @@ namespace VoidTerminal.Views
                 ShowCustomAlert("Dictionnaire fusionné avec succès.", "Import réussi", "#8A2BE2");
             }
         }
-        // --- BOUTON AIDE PRINCIPAL DE LA FORGE ---
         private void BtnHelpForge_Click(object sender, RoutedEventArgs e)
         {
             string helpText = "• Mode 1 (Décalages) : Applique un chiffrement polyalphabétique dynamique. Vous pouvez attribuer des décalages multiples ciblant spécifiquement les voyelles, les consonnes ou une lettre exacte.\n\n" +
@@ -594,7 +598,6 @@ namespace VoidTerminal.Views
             ShowCustomAlert(helpText, "Guide Cryptographique", "#FFA500");
         }
 
-        // --- AIDES CLICABLES DE LA FORGE ---
         private void HelpMode1_Click(object sender, MouseButtonEventArgs e)
         {
             string helpText = "Le Mode 1 opère selon un algorithme de substitution par blocs avec un pointeur de recherche dynamique. Voici ses spécifications :\n\n" +
@@ -636,7 +639,6 @@ namespace VoidTerminal.Views
             ShowCustomAlert(helpText, "Caractères de Reset", "#8A2BE2");
         }
 
-        // --- ACTIONS DES BOUTONS CONFIGURATION CRYPTOGRAPHIQUE ---
         private void BtnExportConfig_Click(object sender, RoutedEventArgs e)
         {
             ExportEncrypted(_data.EngineConfig, ".voidc", "Configuration Cryptée (*.voidc)|*.voidc");
@@ -644,7 +646,6 @@ namespace VoidTerminal.Views
 
         private void BtnImportConfig_Click(object sender, RoutedEventArgs e)
         {
-            // Astuce : on déchiffre directement sans avoir besoin de connaître le nom de ta classe !
             OpenFileDialog ofd = new OpenFileDialog { Filter = "Configuration Cryptée (*.voidc)|*.voidc" };
             if (ofd.ShowDialog() == true)
             {
@@ -667,21 +668,19 @@ namespace VoidTerminal.Views
                     using StreamReader sr = new StreamReader(cs);
                     string json = sr.ReadToEnd();
 
-                    // Magie : on utilise 'dynamic' et 'GetType()' pour s'adapter à ton projet
                     dynamic imported = JsonSerializer.Deserialize(json, _data.EngineConfig.GetType(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                     if (imported != null)
                     {
                         _data.EngineConfig = imported;
                         SecurityManager.SaveSecureData(_data, _password);
-                        OpenForgeUI(); // Recharge l'interface avec la nouvelle configuration
+                        OpenForgeUI(); 
                         ShowCustomAlert("Configuration importée et appliquée.", "Import réussi", "#8A2BE2");
                     }
                 }
                 catch { ShowCustomAlert("Fichier invalide ou mot de passe incorrect.", "Accès Refusé", "#FF5555"); }
             }
         }
-        // --- BOUTON AIDE DU MULTIVERS (POSSIBILITÉS) ---
         private void BtnHelpPossibility_Click(object sender, RoutedEventArgs e)
         {
             string helpText = "⚠️ Mots avec accents :\n" +
@@ -693,9 +692,6 @@ namespace VoidTerminal.Views
 
             ShowCustomAlert(helpText, "Mots Introuvables", "#FFA500");
         }
-        // ==========================================================
-        // --- DRAG & DROP FLUIDE (ANIMATION MODERNE & SANS TREMBLEMENT) ---
-        // ==========================================================
 
         private Point _startPoint;
         private DragAdorner _dragAdorner;
@@ -703,7 +699,6 @@ namespace VoidTerminal.Views
         private double _mouseYOffset;
         private double _fixedX;
 
-        // Nouvelles variables pour le calcul fluide
         private int _originalIndex = -1;
         private int _currentIndex = -1;
         private double _itemHeight = 0;
@@ -731,10 +726,9 @@ namespace VoidTerminal.Views
                     var draggedItem = listBox.ItemContainerGenerator.ItemFromContainer(listBoxItem) as RuleDisplayItem;
                     if (draggedItem != null)
                     {
-                        // 1. Initialisation des mathématiques de hauteur
                         _originalIndex = _tempRules.IndexOf(draggedItem.Rule);
                         _currentIndex = _originalIndex;
-                        _itemHeight = listBoxItem.ActualHeight; // Récupère la taille exacte de la ligne
+                        _itemHeight = listBoxItem.ActualHeight; 
 
                         Point mousePosInItem = e.GetPosition(listBoxItem);
                         _mouseYOffset = mousePosInItem.Y;
@@ -742,28 +736,23 @@ namespace VoidTerminal.Views
                         Point itemPosInList = listBoxItem.TranslatePoint(new Point(0, 0), listBox);
                         _fixedX = itemPosInList.X;
 
-                        // 2. Création de la "photo" fantôme
                         _adornerLayer = AdornerLayer.GetAdornerLayer(listBox);
                         _dragAdorner = new DragAdorner(listBox, listBoxItem);
                         _adornerLayer.Add(_dragAdorner);
                         _dragAdorner.UpdatePosition(_fixedX, itemPosInList.Y);
 
-                        // 3. On cache la ligne d'origine
                         listBoxItem.Opacity = 0.0;
 
                         DataObject dragData = new DataObject("RuleDisplayItemFormat", draggedItem);
 
-                        // 4. Lancement (Le code se met en PAUSE ici jusqu'au relâchement du clic)
                         DragDrop.DoDragDrop(listBoxItem, dragData, DragDropEffects.Move);
 
-                        // 5. NETTOYAGE : Quand l'utilisateur a lâché le bloc (ou annulé)
                         if (_dragAdorner != null)
                         {
                             _adornerLayer.Remove(_dragAdorner);
                             _dragAdorner = null;
                         }
 
-                        // On nettoie toutes les animations visuelles
                         for (int i = 0; i < ListRules.Items.Count; i++)
                         {
                             var container = ListRules.ItemContainerGenerator.ContainerFromIndex(i) as UIElement;
@@ -782,17 +771,13 @@ namespace VoidTerminal.Views
         {
             if (_dragAdorner != null)
             {
-                // Mettre à jour la position du fantôme
                 Point mousePosInList = e.GetPosition(ListRules);
                 _dragAdorner.UpdatePosition(_fixedX, mousePosInList.Y - _mouseYOffset);
 
-                // --- L'ALGORITHME D'ANIMATION FLUIDE ---
-                // On calcule l'index visé avec une simple division mathématique (zéro tremblement !)
                 int targetIndex = (int)(mousePosInList.Y / _itemHeight);
                 if (targetIndex < 0) targetIndex = 0;
                 if (targetIndex >= _tempRules.Count) targetIndex = _tempRules.Count - 1;
 
-                // Si on a changé de position, on déclenche l'animation de glissement des autres lignes
                 if (targetIndex != _currentIndex)
                 {
                     _currentIndex = targetIndex;
@@ -800,19 +785,14 @@ namespace VoidTerminal.Views
                     for (int i = 0; i < ListRules.Items.Count; i++)
                     {
                         var container = ListRules.ItemContainerGenerator.ContainerFromIndex(i) as UIElement;
-                        if (container == null || i == _originalIndex) continue; // On ignore la ligne qu'on tient
-
-                        double targetY = 0; // Position normale
-
-                        // Si la ligne descend
+                        if (container == null || i == _originalIndex) continue; 
+                        double targetY = 0; 
                         if (_currentIndex > _originalIndex && i > _originalIndex && i <= _currentIndex)
-                            targetY = -_itemHeight; // Décale vers le HAUT
+                            targetY = -_itemHeight; 
 
-                        // Si la ligne monte
                         else if (_currentIndex < _originalIndex && i >= _currentIndex && i < _originalIndex)
-                            targetY = _itemHeight; // Décale vers le BAS
+                            targetY = _itemHeight; 
 
-                        // Application de l'animation fluide (QuarticEase = effet de glissement luxueux)
                         TranslateTransform trans = container.RenderTransform as TranslateTransform;
                         if (trans == null)
                         {
@@ -841,14 +821,13 @@ namespace VoidTerminal.Views
 
         private void ListRules_Drop(object sender, DragEventArgs e)
         {
-            // On applique le changement DÉFINITIF uniquement au moment où on lâche !
             if (_originalIndex != -1 && _currentIndex != -1 && _originalIndex != _currentIndex)
             {
                 var rule = _tempRules[_originalIndex];
                 _tempRules.RemoveAt(_originalIndex);
                 _tempRules.Insert(_currentIndex, rule);
 
-                RefreshRuleList(); // Met à jour la liste une seule fois proprement
+                RefreshRuleList(); 
             }
         }
 
@@ -863,9 +842,7 @@ namespace VoidTerminal.Views
             return null;
         }
 
-        // ==========================================================
-        // --- CLASSE DU FANTÔME (CAPTURE NETTE) ---
-        // ==========================================================
+
         public class DragAdorner : System.Windows.Documents.Adorner
         {
             private System.Windows.Shapes.Rectangle _child;

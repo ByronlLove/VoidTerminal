@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32; // Pour l'ouverture du fichier bloc-note
+using Microsoft.Win32; 
 using VoidTerminal.Services;
 using VoidTerminal.Models;
 
@@ -13,7 +13,6 @@ public partial class SetupWindow : Window
         InitializeComponent();
     }
 
-    // ✅ Permet de déplacer la fenêtre en cliquant n'importe où sur le fond
     private void Window_MouseDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ChangedButton == MouseButton.Left)
@@ -28,10 +27,8 @@ public partial class SetupWindow : Window
             return;
         }
 
-        // 1. Création de la structure de données initiale
         var newData = new VoidData();
 
-        // 2. Importation de ton dictionnaire d'origine (le bloc-note)
         MessageBox.Show("Sélectionnez votre fichier dictionnaire (.txt) pour initialiser le lexique Void.");
 
         OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -43,7 +40,6 @@ public partial class SetupWindow : Window
             MessageBox.Show($"{newData.Dictionary.Count} mots importés avec succès.");
         }
 
-        // 3. Sauvegarde sécurisée avec ton mot de passe
         bool success = SecurityManager.SaveSecureData(newData, TxtPassword.Password);
 
         if (success)

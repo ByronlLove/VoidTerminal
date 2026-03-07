@@ -13,7 +13,6 @@ public static class SecurityManager
 
     public static bool DatabaseExists() => File.Exists(DataPath);
 
-    // ✅ La méthode est maintenant BIEN à l'intérieur de la classe
     public static void ImportExternalDictionary(VoidData data, string filePath)
     {
         if (!File.Exists(filePath)) return;
