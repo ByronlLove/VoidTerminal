@@ -83,3 +83,22 @@ Les espaces sont remplacés par `(_)`.
 ![Mode Void](Void/Assets/screenshots/mod-void.png)
 
 `DQQKRAT⊙ OQQEH` → `∂∅∅κρατ⊙(_)ο∅∅εℏ`
+
+### Dictionnaire et résolution d'ambiguïtés
+
+En raison de la nature asymétrique du Mode 1, le déchiffrement d'une séquence produit plusieurs correspondances mathématiquement valides. L'application croise ces résultats avec un dictionnaire pour retrouver le mot exact.
+
+**Apprentissage manuel :** si un mot est inconnu du dictionnaire, il s'affiche en orange. Un clic ouvre la fenêtre des combinaisons possibles — sélectionnez la bonne correspondance et ajoutez-la à votre dictionnaire personnel.
+
+### Gestionnaire de notes
+
+Création, édition et renommage de notes privées stockées localement. Chaque note est chiffrée dans le profil principal `data.void`.
+
+### Import / Export
+
+| Format | Contenu | Usage |
+|--------|---------|-------|
+| `.voidn` | Notes | Partage de notes avec un utilisateur possédant le même mot de passe maître |
+| `.voidd` | Dictionnaire personnel | Transfert du lexique entre machines |
+| `.voidc` | Configuration cryptographique (règles Mode 1 + alphabet Void) | Partage de configuration entre utilisateurs |
+| `.void` | Profil complet | Sauvegarde et restauration intégrale |
