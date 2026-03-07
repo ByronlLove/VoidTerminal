@@ -29,9 +29,13 @@ En complément, un module d'alphabet personnalisé permet de substituer visuelle
 
 | Version | Taille | Prérequis |
 |---------|--------|-----------|
-| [VoidTerminal_v1.0.0.zip](https://github.com/ByronlLove/VoidTerminal/releases/tag/v1.0.0) | 197 Ko | [.NET 10 Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |
-| [VoidTerminal_v1.0.0_win-x64.zip](https://github.com/ByronlLove/VoidTerminal/releases/tag/v1.0.0) | 60.4 MB | Aucun |
+| [VoidTerminal_v1.0.0.zip](https://github.com/ByronlLove/VoidTerminal/releases/download/v1.0.0/VoidTerminal_v1.0.0.zip) | 197 Ko | [.NET 10 Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |
+| [VoidTerminal_v1.0.0_win-x64.zip](https://github.com/ByronlLove/VoidTerminal/releases/download/v1.0.0/VoidTerminal_v1.0.0_win-x64.zip) | 60.4 MB | Aucun |
 
+1. Téléchargez l'archive de votre choix
+2. Extrayez et exécutez `Void.exe`
+3. Définissez votre mot de passe maître (clé AES-256)
+4. Importez un dictionnaire `.txt` — source française recommandée : [French Wordlist par Taknok](https://github.com/Taknok/French-Wordlist/blob/master/francais.txt)
 1. Téléchargez l'archive de votre choix
 2. Extrayez et exécutez `Void.exe`
 3. Définissez votre mot de passe maître (clé AES-256)
