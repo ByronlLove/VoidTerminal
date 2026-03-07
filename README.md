@@ -9,7 +9,8 @@ En complément, un module d'alphabet personnalisé permet de substituer visuelle
 -----
 
 ## Aperçu de l'interface
-!![Modes d'affichage](Void/Assets/screenshots/ui-modes.png)
+
+![Modes d'affichage](Void/Assets/screenshots/ui-modes.png)
 
 ![Interface principale](Void/Assets/screenshots/ui-overview.png)
 
@@ -35,6 +36,38 @@ En complément, un module d'alphabet personnalisé permet de substituer visuelle
 2. Extrayez et exécutez `Void.exe`
 3. Définissez votre mot de passe maître (clé AES-256)
 4. Importez un dictionnaire `.txt` — source française recommandée : [French Wordlist par Taknok](https://github.com/Taknok/French-Wordlist/blob/master/francais.txt)
+
+## Fonctionnalités
+
+### Mode 1 — Décalages
+
+Le cœur mathématique de l'application. Via la Forge, l'utilisateur définit des règles de chiffrement, chacune associant une cible typographique (Voyelles, Consonnes, ou une lettre spécifique) à une séquence de décalages.
+
+L'algorithme avance dans la liste des règles de manière unidirectionnelle : lors d'un changement de nature (ex: consonne vers voyelle), le pointeur cherche la prochaine règle compatible en avançant, sans jamais reculer. Les séquences de décalages (ex: `3, 6`) bouclent cycliquement au sein d'une même règle. Un caractère configuré comme interrupteur (ex: `.`) réinitialise l'ensemble des curseurs à zéro.
+
+**Exemple de configuration :**
+- Règle 1 (Voyelles) : `3, 6`
+- Règle 2 (Consonnes) : `2`
+- Règle 3 (Voyelles) : `2`
+- Règle 4 (Consonnes) : `3, 1, 4`
+
+**`BONJOUR. MONDE` → `DQQKRAT⊙ OQQEH`**
+
+| Lettre | Nature   | Règle active        | Décalage | Résultat |
+|--------|----------|---------------------|----------|----------|
+| B      | Consonne | Règle 2 (Consonnes) | +2       | D        |
+| O      | Voyelle  | Règle 3 (Voyelles)  | +2       | Q        |
+| N      | Consonne | Règle 4 (Consonnes) | +3       | Q        |
+| J      | Consonne | Règle 4 (Consonnes) | +1       | K        |
+| O      | Voyelle  | Règle 1 (Voyelles)  | +3       | R        |
+| U      | Voyelle  | Règle 1 (Voyelles)  | +6       | A        |
+| R      | Consonne | Règle 2 (Consonnes) | +2       | T        |
+| .      | Reset    | —                   | —        | ⊙        |
+| M      | Consonne | Règle 2 (Consonnes) | +2       | O        |
+| O      | Voyelle  | Règle 3 (Voyelles)  | +2       | Q        |
+| N      | Consonne | Règle 4 (Consonnes) | +3       | Q        |
+| D      | Consonne | Règle 4 (Consonnes) | +1       | E        |
+| E      | Voyelle  | Règle 1 (Voyelles)  | +3       | H        |
 
 
 
