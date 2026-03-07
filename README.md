@@ -43,7 +43,7 @@ En complément, un module d'alphabet personnalisé permet de substituer visuelle
 
 Le cœur mathématique de l'application. Via le Réglage Cryptographique, l'utilisateur définit des règles de chiffrement, chacune associant une cible typographique (Voyelles, Consonnes, ou une lettre spécifique) à une séquence de décalages.
 
-L'algorithme avance dans la liste des règles de manière unidirectionnelle : lors d'un changement de nature (ex: consonne vers voyelle), le pointeur cherche la prochaine règle compatible en avançant, sans jamais reculer. Les séquences de décalages (ex: `3, 6`) bouclent cycliquement au sein d'une même règle. Un caractère configuré comme interrupteur (ex: `.`) réinitialise l'ensemble des curseurs à zéro.
+L'algorithme avance dans la liste des règles de manière unidirectionnelle : lors d'un changement de nature (ex: consonne vers voyelle), le pointeur cherche la prochaine règle compatible en avançant, en sautant celles de nature opposée. S'il atteint la fin de la liste sans trouver de règle compatible, il repart de la Règle 1. Les séquences de décalages (ex: `3, 6`) bouclent cycliquement au sein d'une même règle. Un espace ne rompt pas un bloc. Un caractère configuré comme reset (ex: `.`) réinitialise l'ensemble des curseurs à zéro.
 
 **Exemple de configuration :**
 - Règle 1 (Voyelles) : `3, 6`
