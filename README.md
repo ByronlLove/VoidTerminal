@@ -9,9 +9,9 @@ En complément, un module d'alphabet personnalisé permet de substituer visuelle
 -----
 
 ## Aperçu de l'interface
-![Modes d'affichage](assets/screenshots/ui-modes.png)
+![Modes d'affichage](Assets/screenshots/ui-modes.png)
 
-![Interface principale](assets/screenshots/ui-overview.png)
+![Interface principale](Assets/screenshots/ui-overview.png)
 
 1. Réglages
 2. Gestionnaire de notes
