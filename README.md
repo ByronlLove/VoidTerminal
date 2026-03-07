@@ -36,10 +36,6 @@ En complément, un module d'alphabet personnalisé permet de substituer visuelle
 2. Extrayez et exécutez `Void.exe`
 3. Définissez votre mot de passe maître (clé AES-256)
 4. Importez un dictionnaire `.txt` — source française recommandée : [French Wordlist par Taknok](https://github.com/Taknok/French-Wordlist/blob/master/francais.txt)
-1. Téléchargez l'archive de votre choix
-2. Extrayez et exécutez `Void.exe`
-3. Définissez votre mot de passe maître (clé AES-256)
-4. Importez un dictionnaire `.txt` — source française recommandée : [French Wordlist par Taknok](https://github.com/Taknok/French-Wordlist/blob/master/francais.txt)
 
 ## Fonctionnalités
 
