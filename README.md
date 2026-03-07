@@ -41,7 +41,7 @@ En complément, un module d'alphabet personnalisé permet de substituer visuelle
 
 ### Mode 1 — Décalages
 
-Le cœur mathématique de l'application. Via la Forge, l'utilisateur définit des règles de chiffrement, chacune associant une cible typographique (Voyelles, Consonnes, ou une lettre spécifique) à une séquence de décalages.
+Le cœur mathématique de l'application. Via le Réglage Cryptographique, l'utilisateur définit des règles de chiffrement, chacune associant une cible typographique (Voyelles, Consonnes, ou une lettre spécifique) à une séquence de décalages.
 
 L'algorithme avance dans la liste des règles de manière unidirectionnelle : lors d'un changement de nature (ex: consonne vers voyelle), le pointeur cherche la prochaine règle compatible en avançant, sans jamais reculer. Les séquences de décalages (ex: `3, 6`) bouclent cycliquement au sein d'une même règle. Un caractère configuré comme interrupteur (ex: `.`) réinitialise l'ensemble des curseurs à zéro.
 
@@ -50,6 +50,8 @@ L'algorithme avance dans la liste des règles de manière unidirectionnelle : lo
 - Règle 2 (Consonnes) : `2`
 - Règle 3 (Voyelles) : `2`
 - Règle 4 (Consonnes) : `3, 1, 4`
+
+![Mode 1](Void/Assets/screenshots/mod1.png)
 
 **`BONJOUR. MONDE` → `DQQKRAT⊙ OQQEH`**
 
@@ -70,4 +72,14 @@ L'algorithme avance dans la liste des règles de manière unidirectionnelle : lo
 | E      | Voyelle  | Règle 1 (Voyelles)  | +3       | H        |
 
 
+### Mode 2 — Alphabet Void
 
+Le Mode Void est une surcouche visuelle appliquée après le chiffrement Mode 1. Dans le Réglage Cryptographique, chaque lettre de l'alphabet est assignée à un symbole de votre choix (caractère spécial, chiffre, ou autre). Le résultat est un texte visuellement opaque, illisible sans la connaissance de l'alphabet utilisé.
+
+Les espaces sont remplacés par `(_)`.
+
+**Avec l'alphabet de l'exemple :** `D=∂`, `Q=∅`, `K=κ`, `R=ρ`, `A=α`, `T=τ`, `O=ο`, `E=ε`, `H=ℏ`
+
+![Mode Void](Void/Assets/screenshots/mod void.png)
+
+`DQQKRAT⊙ OQQEH` → `∂∅∅κρατ⊙(_)ο∅∅εℏ`
