@@ -102,3 +102,23 @@ Création, édition et renommage de notes privées stockées localement. Chaque 
 | `.voidd` | Dictionnaire personnel | Transfert du lexique entre machines |
 | `.voidc` | Configuration cryptographique (règles Mode 1 + alphabet Void) | Partage de configuration entre utilisateurs |
 | `.void` | Profil complet | Sauvegarde et restauration intégrale |
+
+## Spécifications techniques
+
+- **Environnement :** C# / .NET 10
+- **Interface :** WPF (Windows Presentation Foundation)
+- **Chiffrement du profil :** AES-256-CBC, PBKDF2 (100 000 itérations, SHA-256)
+- **Plateforme :** Windows uniquement
+- **Co-Développement :** ByronlLove & Gemini (AI Collaborator)
+
+## Crédits
+
+**ByronlLove** — Conception de l'architecture cryptographique et logicielle, 
+définition des algorithmes, conception de l'expérience utilisateur (UI/UX), 
+tests (QA) et publication.
+
+Code source implémenté avec l'assistance de Gemini (Google AI).
+
+## Licence
+
+Ce projet est distribué sous licence [MIT](LICENSE).
