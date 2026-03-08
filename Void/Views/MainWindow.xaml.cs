@@ -284,8 +284,36 @@ namespace VoidTerminal.Views
         }
 
         private string FormatSegment(string input, ref bool isStart) { if (string.IsNullOrEmpty(input)) return input; StringBuilder sb = new StringBuilder(); foreach (char c in input) { if (char.IsLetter(c)) { if (isStart) { sb.Append(char.ToUpper(c)); isStart = false; } else sb.Append(char.ToLower(c)); } else { sb.Append(c); if (c == '.' || c == '?' || c == '!' || c == '\n') isStart = true; } } return sb.ToString(); }
-        private void TxtResult_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) { TextPointer pointer = TxtResult.GetPositionFromPoint(e.GetPosition(TxtResult), true); if (pointer != null) { var element = pointer.Parent as TextElement; while (element != null && !(element is Hyperlink)) element = element.Parent as TextElement; if (element is Hyperlink link && link.Tag is List<string> possibilities) { _fullPossibilities = possibilities; ListPossibilities.ItemsSource = _fullPossibilities; ShowOverlayWithAnimation(PossibilityOverlay, LaserBorderPoss); TxtSearchPossibilities.Width = 0; TxtSearchPossibilities.Text = ""; _isSearchPossOpen = false; e.Handled = true; } } }
+        private void TxtResult_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) 
+        {
+            if (AddWordsOverlay.Visibility == Visibility.Visible || 
+                PossibilityOverlay.Visibility == Visibility.Visible ||
+                DictManagerOverlay.Visibility == Visibility.Visible ||
+                CustomAlertOverlay.Visibility == Visibility.Visible)
+            {
+                return; 
+            }
 
+            TextPointer pointer = TxtResult.GetPositionFromPoint(e.GetPosition(TxtResult), false); 
+    
+            if (pointer != null) 
+            { 
+                var element = pointer.Parent as TextElement; 
+                while (element != null && !(element is Hyperlink)) 
+                    element = element.Parent as TextElement; 
+            
+                if (element is Hyperlink link && link.Tag is List<string> possibilities) 
+                { 
+                    _fullPossibilities = possibilities; 
+                    ListPossibilities.ItemsSource = _fullPossibilities; 
+                    ShowOverlayWithAnimation(PossibilityOverlay, LaserBorderPoss); 
+                    TxtSearchPossibilities.Width = 0; 
+                    TxtSearchPossibilities.Text = ""; 
+                    _isSearchPossOpen = false; 
+                    e.Handled = true; 
+                } 
+            } 
+        }
         private void AddWordToDictionary(string word) { string w = word.ToLower(); if (!_data.Dictionary.Contains(w)) { _data.Dictionary.Add(w); _data.UserAddedWords.Add(w); } }
         private void BtnAddDico_Click(object sender, RoutedEventArgs e) { var matches = Regex.Matches(TxtInput.Text, @"\w+"); var newCandidates = new HashSet<string>(); foreach (Match match in matches) { string w = match.Value.ToLower(); if (!_data.Dictionary.Contains(w)) newCandidates.Add(w); } if (newCandidates.Count > 0) { ListNewWordsCandidates.ItemsSource = newCandidates.OrderBy(x => x).ToList(); ListNewWordsCandidates.SelectAll(); ShowOverlayWithAnimation(AddWordsOverlay, LaserBorderAddWords); } else ShowCustomAlert("Tous les mots sont déjà dans le dictionnaire.", "Information", "#FFA500"); }
         private void BtnConfirmAddWords_Click(object sender, RoutedEventArgs e) { int count = 0; foreach (string w in ListNewWordsCandidates.SelectedItems) { AddWordToDictionary(w); count++; } SecurityManager.SaveSecureData(_data, _password); AddWordsOverlay.Visibility = Visibility.Collapsed; ShowCustomAlert($"{count} mot(s) ajouté(s) au dictionnaire.", "Opération réussie", "#FFA500"); }
