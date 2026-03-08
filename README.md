@@ -89,6 +89,7 @@ Les espaces sont remplacés par `(_)`.
 En raison de la nature asymétrique du Mode 1, le déchiffrement d'une séquence produit plusieurs correspondances mathématiquement valides. L'application croise ces résultats avec un dictionnaire pour retrouver le mot exact.
 
 **Apprentissage manuel :** si un mot est inconnu du dictionnaire, il s'affiche en orange. Un clic ouvre la fenêtre des combinaisons possibles — sélectionnez la bonne correspondance et ajoutez-la à votre dictionnaire personnel.
+* **Resynchronisation du moteur :** Le cycle de chiffrement étant continu, si plusieurs mots inconnus se suivent, le moteur suspend le déchiffrement. La résolution manuelle du premier mot "orange" est indispensable pour resynchroniser l'algorithme (lui redonner le bon décalage) et débloquer automatiquement la suite de la phrase.
 
 ### Gestionnaire de notes
 
