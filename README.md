@@ -104,6 +104,10 @@ Création, édition et renommage de notes privées stockées localement. Chaque 
 | `.voidc` | Configuration cryptographique (règles Mode 1 + alphabet Void) | Partage de configuration entre utilisateurs |
 | `.void` | Profil complet | Sauvegarde et restauration intégrale |
 
+## Fonctionnalités prévues
+
+[ ] Gestion des caractères spéciaux : Ajout de la prise en charge de la ponctuation et des symboles depuis le Réglage Cryptographique.
+
 ## Spécifications techniques
 
 - **Environnement :** C# / .NET 10
