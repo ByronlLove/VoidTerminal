@@ -106,7 +106,8 @@ Création, édition et renommage de notes privées stockées localement. Chaque 
 
 ## Fonctionnalités prévues
 
-[ ] Gestion des caractères spéciaux : Ajout de la prise en charge de la ponctuation et des symboles depuis le Réglage Cryptographique.
+- [ ] **Gestion des caractères spéciaux** : Ajout de la prise en charge de la ponctuation et des symboles depuis le Réglage Cryptographique.
+- [ ] **Injection de bruit (Padding)** : Ajout de caractères aléatoires générés dynamiquement (séparés par un marqueur) avant le chiffrement pour fausser la longueur d'origine des mots.
 
 ## Spécifications techniques
 
