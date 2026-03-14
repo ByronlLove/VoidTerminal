@@ -1,6 +1,6 @@
 # VoidTerminal
 
-VoidTerminal est une application de chiffrement polyalphabétique et un gestionnaire de notes locales. Son moteur de substitution repose sur des règles créées par l'utilisateur : vous définissez vos propres séquences de décalage (ex: +3, +1, +4) et les assignez à des cibles typographiques (voyelles, consonnes, ou lettres spécifiques).
+VoidTerminal est une application de cryptographie polyalphabétique et un gestionnaire de notes locales. Son moteur de substitution repose sur des règles créées par l'utilisateur : vous définissez vos propres séquences de décalage (ex: +3, +1, +4) et les assignez à des cibles typographiques (voyelles, consonnes, ou lettres spécifiques).
 
 Lors du chiffrement, l'algorithme évolue dynamiquement en appliquant ces séquences au fil du texte. Étant donné que le décalage dépend de la nature de la lettre d'origine (qui est masquée une fois chiffrée), le déchiffrement génère plusieurs correspondances mathématiquement valides. L'application intègre donc un dictionnaire de résolution (à importer par l'utilisateur au premier lancement, puis enrichissable manuellement) qui filtre ces ambiguïtés pour retrouver le mot exact.
 
@@ -41,7 +41,7 @@ En complément, un module d'alphabet personnalisé permet de substituer visuelle
 
 ### Mode 1 — Décalages
 
-Le cœur mathématique de l'application. Via le Réglage Cryptographique, l'utilisateur définit des règles de chiffrement, chacune associant une cible typographique (Voyelles, Consonnes, ou une lettre spécifique) à une séquence de décalages.
+Via le Réglage Cryptographique, l'utilisateur définit des règles de décalages, chacune associant une cible typographique (Voyelles, Consonnes, ou une lettre spécifique) à une séquence de décalages.
 
 L'algorithme avance dans la liste des règles de manière unidirectionnelle : lors d'un changement de nature (ex: consonne vers voyelle), le pointeur cherche la prochaine règle compatible en avançant, en sautant celles de nature opposée. S'il atteint la fin de la liste sans trouver de règle compatible, il repart de la Règle 1. Les séquences de décalages (ex: `3, 6`) bouclent cycliquement au sein d'une même règle. Un espace ne rompt pas un bloc. Un caractère configuré comme caractère reset (ex: `.`) réinitialise l'ensemble des curseurs à zéro.
 
