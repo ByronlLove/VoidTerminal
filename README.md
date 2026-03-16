@@ -109,6 +109,7 @@ Création, édition et renommage de notes privées stockées localement. Chaque 
 - [ ] **Gestion des caractères spéciaux** : Ajout de la prise en charge de la ponctuation et des symboles depuis le Réglage Cryptographique.
 - [ ] **Injection de bruit (Padding)** : Ajout de caractères aléatoires générés dynamiquement (séparés par un marqueur) avant le chiffrement pour fausser la longueur d'origine des mots.
 - [ ] **Anti-Brute Force (Interface)** : Implémentation d'un délai d'attente sur l'écran de connexion
+- [ ] **Anti-Brute Force (Fichier data.void)** : Remplacement de PBKDF2 par Argon2id pour la dérivation de clé.
 
 ## Spécifications techniques
 
