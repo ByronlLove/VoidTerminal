@@ -110,6 +110,7 @@ Création, édition et renommage de notes privées stockées localement. Chaque 
 - [ ] **Injection de bruit (Padding)** : Ajout de caractères aléatoires générés dynamiquement (séparés par un marqueur) avant le chiffrement pour fausser la longueur d'origine des mots.
 - [ ] **Anti-Brute Force (Interface)** : Implémentation d'un délai d'attente sur l'écran de connexion
 - [ ] **Anti-Brute Force (Fichier data.void)** : Remplacement de PBKDF2 par Argon2id pour la dérivation de clé.
+- [ ] **Profil Leurre** : Création d'un système avec un "faux mot de passe" ouvrant un leurre (profil vide ou fausses notes) pour protéger le véritable profil `.void`.
 
 ## Spécifications techniques
 
