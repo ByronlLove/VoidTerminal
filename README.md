@@ -111,6 +111,7 @@ Création, édition et renommage de notes privées stockées localement. Chaque 
 - [ ] **Anti-Brute Force (Interface)** : Implémentation d'un délai d'attente sur l'écran de connexion
 - [ ] **Anti-Brute Force (Fichier data.void)** : Remplacement de PBKDF2 par Argon2id pour la dérivation de clé.
 - [ ] **Profil Leurre** : Création d'un système avec un "faux mot de passe" ouvrant un leurre (profil vide ou fausses notes) pour protéger le véritable profil `.void`.
+- [ ] **Transposition des caractères** : Mélange de l'ordre des lettres avant chiffrement pour casser la structure de la phrase.
 
 ## Spécifications techniques
 
