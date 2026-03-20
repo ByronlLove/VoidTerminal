@@ -112,6 +112,7 @@ Création, édition et renommage de notes privées stockées localement. Chaque 
 - [ ] **Anti-Brute Force (Fichier data.void)** : Remplacement de PBKDF2 par Argon2id pour la dérivation de clé.
 - [ ] **Profil Leurre** : Création d'un système avec un "faux mot de passe" ouvrant un leurre (profil vide ou fausses notes) pour protéger le véritable profil `.void`.
 - [ ] **Transposition des caractères** : Mélange de l'ordre des lettres avant chiffrement pour casser la structure de la phrase.
+- [ ] **Version Ligne de Commande (CLI)** : Création d'une version console pour permettre l'automatisation du chiffrement via des scripts.
 
 ## Spécifications techniques
 
