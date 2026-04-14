@@ -27,10 +27,10 @@ En complément, un module d'alphabet personnalisé permet de substituer visuelle
 
 ## Installation
 
-| Version | Taille | Prérequis |
-|---------|--------|-----------|
-| [VoidTerminal_v1.0.0.zip](https://github.com/ByronlLove/VoidTerminal/releases/download/v1.0.0/VoidTerminal_v1.0.0.zip) | 197 Ko | [.NET 10 Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |
-| [VoidTerminal_v1.0.0_win-x64.zip](https://github.com/ByronlLove/VoidTerminal/releases/download/v1.0.0/VoidTerminal_v1.0.0_win-x64.zip) | 60.4 MB | Aucun |
+| Version                                                                                                                                | Taille  | Prérequis |
+|----------------------------------------------------------------------------------------------------------------------------------------|---------|-----------|
+| [VoidTerminal_v1.0.0.zip](https://github.com/ByronlLove/VoidTerminal/releases/download/v1.0.0/VoidTerminal_v1.0.0.zip)                 | 197 Ko  | [.NET 10 Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |
+| [VoidTerminal_v1.0.0_win-x64.zip](https://github.com/ByronlLove/VoidTerminal/releases/download/v1.0.0/VoidTerminal_v1.0.0_win-x64.zip) | 60.4 MB | Aucun     |
 
 1. Téléchargez l'archive de votre choix
 2. Extrayez et exécutez `Void.exe`
@@ -64,7 +64,7 @@ L'algorithme avance dans la liste des règles de manière unidirectionnelle : lo
 | O      | Voyelle  | Règle 1 (Voyelles)  | +3       | R        |
 | U      | Voyelle  | Règle 1 (Voyelles)  | +6       | A        |
 | R      | Consonne | Règle 2 (Consonnes) | +2       | T        |
-| .      | Reset    | —                   | —        | ⊙        |
+| .      | Reset    | —                   | —        | ⊙       |
 | M      | Consonne | Règle 2 (Consonnes) | +2       | O        |
 | O      | Voyelle  | Règle 3 (Voyelles)  | +2       | Q        |
 | N      | Consonne | Règle 4 (Consonnes) | +3       | Q        |
@@ -97,12 +97,12 @@ Création, édition et renommage de notes privées stockées localement. Chaque 
 
 ### Import / Export
 
-| Format | Contenu | Usage |
-|--------|---------|-------|
-| `.voidn` | Notes | Partage de notes avec un utilisateur possédant le même mot de passe maître |
-| `.voidd` | Dictionnaire personnel | Transfert du lexique entre machines |
-| `.voidc` | Configuration cryptographique (règles Mode 1 + alphabet Void) | Partage de configuration entre utilisateurs |
-| `.void` | Profil complet | Sauvegarde et restauration intégrale |
+| Format   | Contenu                                                       | Usage                                                                      |
+|----------|---------------------------------------------------------------|----------------------------------------------------------------------------|
+| `.voidn` | Notes                                                         | Partage de notes avec un utilisateur possédant le même mot de passe maître |
+| `.voidd` | Dictionnaire personnel                                        | Transfert du lexique entre machines                                        |
+| `.voidc` | Configuration cryptographique (règles Mode 1 + alphabet Void) | Partage de configuration entre utilisateurs                                |
+| `.void`  | Profil complet                                                | Sauvegarde et restauration intégrale                                       |
 
 ## Fonctionnalités prévues
 
